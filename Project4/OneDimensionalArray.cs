@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Principal;
+
 
 namespace Project4
 {
@@ -6,7 +8,16 @@ namespace Project4
     {
         private T[] array;
 
-        public OneDimensionalArray(bool getFromUser, ValueProvider<T> input_provider) : base(getFromUser, input_provider) {}
+
+        public OneDimensionalArray() {
+            array = new T[7];
+        }
+
+
+        public OneDimensionalArray(int n) {
+            array = new T[n];
+        }
+
 
         public override void Print()
         {
@@ -17,27 +28,75 @@ namespace Project4
             Console.WriteLine("");
         }
 
-        protected override void GetFromUser()
+        public bool CheckForEmptySlots(ref int index)
         {
-            Console.WriteLine("Получение одномерного массива с клавиатуры, введите длину");
-            int length = int.Parse(Console.ReadLine());
-            array = new T[length];
-            Console.WriteLine("Вводите значения");
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = provider.ConvertFromString(Console.ReadLine());
+                if (array[i] == null)
+                {
+                    index = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void AddElement(T newEl)
+        {
+            int index = 0;
+            if (CheckForEmptySlots(ref index))
+            {
+                array[index] = newEl;
+            }
+            else
+            {
+                int oldLength = array.Length;
+                Array.Resize(ref array, array.Length * 2 + 1);
+                array[oldLength] = newEl;
             }
         }
 
-        protected override void GetRandom()
+        public int NumberOfElements<C>()
         {
-            Random random = new Random();
-            int length = random.Next(2, 6);
-            array = new T[length];
+            int n = 0;
+            foreach (T el in array)
+            {
+                if (el is C)
+                {
+                    n++;
+                }
+            }
+            return n;
+        }
+
+
+        public void Reverse<T>(T[] array)
+        {
+            T el;
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = provider.Generate();
+                el = array[i];
+                array[i] = array[array.Length-1-i];
+                array[array.Length-1-i] = el;
             }
+        }
+        public void DeleteElement()
+        {
+
+        }
+
+        public T[] ElementsOfType<C>()
+        {
+            T[] elementsOfType = new T[NumberOfElements<C>()];
+            int n = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] is C)
+                {
+                    elementsOfType[n] = array[i];
+                }
+            }
+            return elementsOfType;
         }
     }
 }
