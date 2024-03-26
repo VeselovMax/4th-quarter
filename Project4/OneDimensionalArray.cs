@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Security.Principal;
-
+using System.ComponentModel;
 
 namespace Project4
 {
@@ -56,6 +55,11 @@ namespace Project4
             }
         }
 
+        public void DeleteElement()
+        {
+
+        }
+
         public int NumberOfElements<C>()
         {
             int n = 0;
@@ -69,20 +73,83 @@ namespace Project4
             return n;
         }
 
-
-        public void Reverse<T>(T[] array)
+        public int CountThatFollow(Predicate<T> conditionFunc)
         {
-            T el;
+            int count = 0;
             for (int i = 0; i < array.Length; i++)
             {
-                el = array[i];
-                array[i] = array[array.Length-1-i];
-                array[array.Length-1-i] = el;
+                if (conditionFunc(array[i]))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public bool IfAtLeastOneFollows(Predicate<T> conditionFunc)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (conditionFunc(array[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IfAllFollow(Predicate<T> conditionFunc)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (!conditionFunc(array[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public T FirstThatFollows(Predicate<T> conditionFunc)
+        {
+            try
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (conditionFunc(array[i]))
+                    {
+                        return array[i];
+                    }
+                }
+                return array[0];
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
-        public void DeleteElement()
-        {
 
+        public void DoToEveryElement(Action<T> action)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                action(array[i]);
+            }
+        }
+
+        public T[] AllThatFollow(Predicate<T> conditionFunc)
+        {
+            T[] allThatFollow = new T[CountThatFollow(conditionFunc)];
+            int n = 0;
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (!conditionFunc(array[i]))
+                {
+                    allThatFollow[n] = array[i];
+                    n++;
+                }
+            }
+            return allThatFollow;
         }
 
         public T[] ElementsOfType<C>()
@@ -94,9 +161,31 @@ namespace Project4
                 if (array[i] is C)
                 {
                     elementsOfType[n] = array[i];
+                    n++;
                 }
             }
             return elementsOfType;
+        }
+
+        public void Reverse(T[] array)
+        {
+            T el;
+            for (int i = 0; i < array.Length-1-i; i++)
+            {
+                el = array[i];
+                array[i] = array[array.Length-1-i];
+                array[array.Length-1-i] = el;
+            }
+        }
+
+        public void MinValue()
+        {
+            
+        }
+
+        public void MaxValue()
+        {
+
         }
     }
 }
