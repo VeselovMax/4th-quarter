@@ -30,26 +30,30 @@ namespace Project4
             Console.WriteLine("");
         }
 
-        public void AddElement(T newEl)
+        public void Add(T newEl)
         {
             if (size >= array.Length)
             {
-                //T[] newArray = new T[_capacity];
-                //Array.CopyTo(newArray, 0, _array, _size);
-                //_array = newArray;
                 Array.Resize(ref array, array.Length*2+1);
             }
             array[size] = newEl;
             size++;
         }
 
-        public void DeleteElement(int index)
+        public void Delete(int index)
         {
-            for (int i = index; i < size; i++)
+            if (index >= 0)
             {
-                array[i] = array[i+1];
+                for (int i = index; i < size-1; i++)
+                {
+                    array[i] = array[i+1];
+                }
+                size--;
             }
-            size--;
+            else
+            {
+                Console.WriteLine("negative index"); // Should this if/else be a try/catch?
+            }
         }
 
         public int NumberOfElements<C>()
@@ -152,7 +156,7 @@ namespace Project4
             return elementsOfType;
         }
 
-        public void Reverse(T[] array)
+        public void Reverse()
         {
             T el;
             for (int i = 0; i < array.Length-1-i; i++)
