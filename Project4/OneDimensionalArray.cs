@@ -7,7 +7,7 @@ namespace Project4
     {        
         private T[] array;
 
-        public int size;
+        private int size;
 
         private const int defaultCapacity = 7;
 
@@ -43,9 +43,13 @@ namespace Project4
             size++;
         }
 
-        public void DeleteElement()
+        public void DeleteElement(int index)
         {
-            
+            for (int i = index; i < size; i++)
+            {
+                array[i] = array[i+1];
+            }
+            size--;
         }
 
         public int NumberOfElements<C>()
